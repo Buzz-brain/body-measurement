@@ -7,7 +7,8 @@ JWT_EXP_DELTA = timedelta(days=7)
 
 
 # CORS config (for Flask-CORS)
-CORS_RESOURCES = {r"/api/*": {"origins": "*"}}
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+CORS_RESOURCES = {r"/api/*": {"origins": [FRONTEND_URL]}}
 CORS_SUPPORTS_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ["Content-Type", "Authorization"]
 CORS_METHODS = ["GET", "POST", "OPTIONS"]
