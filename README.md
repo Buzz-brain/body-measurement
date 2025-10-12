@@ -1,115 +1,145 @@
-# AI-Based Human Body Measurement System for Tailoring & Fashion E-Commerce
 
-This project is a real-time body measurement API built with **Flask**, **MediaPipe**, **OpenCV**, and **PyTorch**. By analyzing **front and side pose images** of a person, it calculates accurate human body measurements useful for tailoring, clothing size prediction, and virtual fitting rooms.
-
-> 📸 Just send **front and side pose images** (captured using a smartphone or webcam) to this API, and receive key body measurements in centimeters — perfect for fashion retail platforms and tailor-made garment businesses.
-
----
-
-## Features
-
-- Real-time image-based body measurement
-- AI-powered depth estimation using **MiDaS**
-- Measurement accuracy with a deviation of **±2-3 cm**
-- Calibrates scale using an **A4 paper** as a reference object
-- Easily integratable into fashion e-commerce or tailoring platforms
-- No external APIs — runs entirely on your local or server environment
-
----
-
-
-## Libraries Used
-
-| Library         | Purpose                                                                 |
-|----------------|-------------------------------------------------------------------------|
-| `Flask`        | To expose a simple HTTP API                                             |
-| `OpenCV`       | For image processing and contour detection                              |
-| `MediaPipe`    | For pose landmark detection (shoulders, hips, etc.)                     |
-| `PyTorch`      | For AI-based **depth estimation** using [MiDaS](https://github.com/isl-org/MiDaS) |
-| `torchvision`  | Support for model loading & image transformations                       |
+<div align="center">
+  <img src="https://img.icons8.com/color/96/tape-measure.png" width="80" alt="Tape Measure Icon"/>
+  
+  <h1>AI Body Measurement API</h1>
+  <h3>for Tailoring & Fashion E-Commerce</h3>
+  <p>
+    <img src="https://img.shields.io/badge/Flask-API-blue?logo=flask"/>
+    <img src="https://img.shields.io/badge/MediaPipe-Landmarks-orange?logo=google"/>
+    <img src="https://img.shields.io/badge/PyTorch-Depth%20AI-red?logo=pytorch"/>
+    <img src="https://img.shields.io/badge/OpenCV-Image%20Processing-green?logo=opencv"/>
+    <img src="https://img.shields.io/badge/Deployed%20on-Render-430098?logo=render"/>
+  </p>
+  <p>📸 Upload <b>front & side pose images</b> and get instant, AI-powered body measurements for fashion, tailoring, and e-commerce.</p>
+</div>
 
 ---
 
-# How It Works
+## ✨ Features
 
-1. Detects key landmarks using **MediaPipe Pose** (shoulders, hips, knees, ankles).
-2. Uses **A4 paper** in the image to calibrate real-world scale from pixels.
-3. Enhances width and depth estimation using the **MiDaS depth AI model**.
-4. Calculates measurements using geometric approximations (**elliptical body model**).
-5. Returns measurement data in **JSON format**.
+<ul>
+  <li>⚡ <b>Real-time</b> image-based body measurement</li>
+  <li>🤖 <b>AI-powered depth estimation</b> (MiDaS + PyTorch)</li>
+  <li>📏 <b>±2-3 cm accuracy</b> (A4 paper calibration)</li>
+  <li>🧩 <b>MediaPipe</b> pose landmark detection</li>
+  <li>🔒 <b>Secure REST API</b> (JWT Auth ready)</li>
+  <li>🌐 <b>Easy integration</b> with any web/mobile frontend</li>
+  <li>🚀 <b>Deployable</b> on <b>Render</b> (backend) & <b>Vercel</b> (frontend)</li>
+</ul>
 
+---
 
-## How to Run
+## 🛠️ Tech Stack
+
+| <img src="https://img.icons8.com/ios-filled/24/000000/flask.png"/> Flask | <img src="https://img.icons8.com/color/24/000000/opencv.png"/> OpenCV | <img src="https://img.icons8.com/color/24/000000/pytorch.png"/> PyTorch | <img src="https://img.icons8.com/color/24/000000/google-logo.png"/> MediaPipe | <img src="https://img.icons8.com/color/24/000000/render.png"/> Render |
+|---|---|---|---|---|
+
+---
+
+## 🚀 Quickstart
 
 ```bash
+# 1. Install dependencies
 pip install -r requirements.txt
+
+# 2. Run the server (for local dev)
 python app.py
+
+# Or for production (Render):
+gunicorn app:app
 ```
 
-
-# API Endpoint
-
-**POST** `/measurements`
-
-> ℹ️ For reference, see the images placed  in the root directory.
-
----
-##  Request
-Send a `multipart/form-data` **POST** request with the following fields:
-
-- **`front_image`**: JPEG/PNG image captured from the front *(required)*
-- **`side_image`** *(optional)*: JPEG/PNG image from the side *(for better accuracy)*
-- **`user_height_cm`** : Real height of the person (in cm) for more precise calibration
-
 ---
 
-###  Example using `curl`
+## 🌍 API Usage
+
+### POST `/measurements`
+
+<details>
+<summary>Show Example Request</summary>
 
 ```bash
-curl -X POST http://localhost:5000/measurements \
+curl -X POST https://your-backend.onrender.com/measurements \
   -F "front_image=@front.jpg" \
   -F "side_image=@side.jpg" \
   -F "user_height_cm=170"
 ```
+</details>
 
-# Measurements Provided
+#### Request Fields
 
-| **Measurement Name**     | **Description**                                                   |
-|--------------------------|-------------------------------------------------------------------|
-| `shoulder_width`         | Distance between left and right shoulders                        |
-| `chest_width`            | Width at chest level                                              |
-| `chest_circumference`    | Estimated chest circumference                                     |
-| `waist_width`            | Width at waist level                                              |
-| `waist`                  | Estimated waist circumference                                     |
-| `hip_width`              | Distance between left and right hips                             |
-| `hip_circumference`      | Estimated hip circumference *(if side image is given)*           |
+| Field           | Type      | Required | Description                                 |
+|-----------------|-----------|----------|---------------------------------------------|
+| `front_image`   | file      | Yes      | JPEG/PNG image (front pose)                 |
+| `side_image`    | file      | No       | JPEG/PNG image (side pose, improves accuracy)|
+| `user_height_cm`| number    | Yes      | Real height in centimeters                  |
+
+#### Response
+
+Returns JSON with all measurements, confidence scores, and landmark points used.
 
 ---
 
-> 📌 **Note:**  
-> The system uses **AI depth maps** and **contour-based width detection**.  
-> Final measurements may have a **±2–3 cm variance** depending on image quality and user alignment.
+## 📏 Measurements Provided
 
+| Name                    | Description                                 | Confidence | Points Used |
+|-------------------------|---------------------------------------------|------------|-------------|
+| `shoulder_width`        | Distance between shoulders                  |    ✅      |     ✔️      |
+| `chest_circumference`   | Estimated chest circumference               |    ✅      |     ✔️      |
+| `waist_circumference`   | Estimated waist circumference               |    ✅      |     ✔️      |
+| `hip_circumference`     | Estimated hip circumference                 |    ✅      |     ✔️      |
+| `biceps_circumference`  | Upper arm circumference                     |    ✅      |     ✔️      |
+| `thigh_circumference`   | Thigh circumference                        |    ✅      |     ✔️      |
+| `inseam`                | Inseam length                              |    ✅      |     ✔️      |
+| `long_sleeve_length`    | Long sleeve length                         |    ✅      |     ✔️      |
+| `short_sleeve_length`   | Short sleeve length                        |    ✅      |     ✔️      |
+| `three_quarter_sleeve`  | 3/4 sleeve length                          |    ✅      |     ✔️      |
+| `top_length`            | Top garment length                         |    ✅      |     ✔️      |
+| `full_length`           | Full body length                           |    ✅      |     ✔️      |
+| `estimated_height`      | Estimated height from image                 |    ✅      |     ✔️      |
 
-# Integration in Fashion E-Commerce
+---
 
-This solution is plug-and-play for:
+## �️ Deployment
 
-- **E-commerce brands** offering size suggestions or virtual try-ons.
-- **Tailoring platforms** wanting remote client measurements.
-- **Clothing manufacturers** personalizing size charts for customers.
-- **Fashion mobile apps** for custom-fitted clothing suggestions.
+### Backend (Render)
+1. Push your backend code to GitHub.
+2. Create a new Web Service on <a href="https://render.com/">Render</a>.
+3. Set build command: <code>pip install -r requirements.txt</code>
+4. Set start command: <code>gunicorn app:app</code>
+5. Add environment variables as needed.
+6. Set Flask to listen on <code>0.0.0.0</code> and use <code>PORT</code> env var.
 
-Simply integrate this API into your frontend — mobile or web — to collect two photos and retrieve exact measurements.
+### Frontend (Vercel)
+1. Push your frontend (React/Vite) to GitHub.
+2. Import your repo on <a href="https://vercel.com/">Vercel</a>.
+3. Set project root to <code>frontend</code> folder.
+4. Add env var: <code>VITE_API_BASE=https://your-backend.onrender.com</code>
+5. Deploy!
 
+---
 
-## 🤝 Contributions
+## 🔗 Integration & UI/UX
 
-PRs and suggestions are welcome! Fork this repo, raise an issue, or open a pull request.
+<ul>
+  <li>🛒 <b>E-commerce</b>: Size suggestions, virtual try-ons</li>
+  <li>✂️ <b>Tailoring</b>: Remote client measurements</li>
+  <li>🏭 <b>Manufacturers</b>: Personalized size charts</li>
+  <li>📱 <b>Fashion apps</b>: Custom-fitted clothing suggestions</li>
+</ul>
+
+---
+
+## �‍💻 Contributing
+
+Pull requests and suggestions are welcome! Fork, raise an issue, or open a PR.
+
+---
 
 ## 📜 License
 
-MIT License. Feel free to use this for personal or commercial projects — just give credit.
+MIT License — use freely for personal or commercial projects. Please give credit.
 
 
 
