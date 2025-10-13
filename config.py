@@ -6,11 +6,21 @@ JWT_ALGO = 'HS256'
 JWT_EXP_DELTA = timedelta(days=7)
 
 
+
 # CORS config (for Flask-CORS)
-FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
-CORS_RESOURCES = {r"/api/*": {"origins": [FRONTEND_URL]}}
+# Explicitly list all allowed origins
+CORS_RESOURCES = {
+	r"/api/*": {
+		"origins": [
+			"http://localhost:5173",  # Vite dev server
+			"http://localhost:3000",  # React default
+			"https://virtual-body-measurement.vercel.app",  # Vercel frontend
+			"https://aurore-chirurgic-lucy.ngrok-free.dev"  # ngrok tunnel
+		]
+	}
+}
 CORS_SUPPORTS_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ["Content-Type", "Authorization"]
+CORS_ALLOW_HEADERS = ["Content-Type", "Authorization", "ngrok-skip-browser-warning"]
 CORS_METHODS = ["GET", "POST", "OPTIONS"]
 
 
