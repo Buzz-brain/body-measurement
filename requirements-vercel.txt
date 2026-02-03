@@ -1,0 +1,6 @@
+Flask==3.1.0
+Flask-Cors==5.0.0
+Flask-JWT-Extended==4.6.0
+gunicorn==21.2.0
+pymongo==4.3.3
+bcrypt==4.1.2

@@ -1,3 +1,8 @@
+
+# Load environment variables from .env
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask
 from flask_cors import CORS
 import config
@@ -10,7 +15,7 @@ app.config.from_object('config')
 jwt = JWTManager(app)
 CORS(app, resources=config.CORS_RESOURCES, supports_credentials=config.CORS_SUPPORTS_CREDENTIALS, allow_headers=config.CORS_ALLOW_HEADERS, methods=config.CORS_METHODS)
 app.register_blueprint(auth_bp)
-app.register_blueprint(measurement_bp)
+app.register_blueprint(measurement_bp)  
 
 
 # Handle JWT missing/invalid token errors gracefully

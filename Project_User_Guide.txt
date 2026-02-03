@@ -1,0 +1,109 @@
+=========================================================
+PROJECT USER GUIDE
+Virtual Body Measurement System
+=========================================================
+
+1. Introduction
+---------------
+This project is a Virtual Body Measurement System designed to allow users to capture or upload body images, automatically estimate key body measurements using AI/computer vision, and view results in a user-friendly dashboard. The system supports user authentication, measurement history, and advanced result visualization.
+
+2. System Requirements
+----------------------
+- Operating System: Windows 10/11, macOS, or Linux
+- Python 3.10+ (for backend)
+- Node.js 18+ and npm (for frontend)
+- MongoDB (local or cloud, for database)
+- Git (for cloning the repository)
+- VS Code or any code editor
+- Internet connection (for ngrok tunneling and API calls)
+- Required Python packages (see requirements.txt)
+- Required Node packages (see package.json)
+
+3. Installation Guide
+---------------------
+A. Clone the repository:
+   git clone https://github.com/Buzz-brain/body-measurement.git
+   cd body-measurement
+
+B. Backend Setup:
+   1. Create and activate a Python virtual environment:
+      python -m venv venv
+      # Windows:
+      .\venv\Scripts\Activate
+      # macOS/Linux:
+      source venv/bin/activate
+
+   2. Install backend dependencies:
+      pip install -r requirements.txt
+
+   3. Configure environment variables:
+      - Copy .env.example to .env and fill in values (e.g., DB URI, JWT secret).
+      - Ensure MongoDB is running and accessible.
+
+C. Frontend Setup:
+   1. Navigate to the frontend folder:
+      cd frontend
+
+   2. Install frontend dependencies:
+      npm install
+
+   3. Configure frontend environment:
+      - Copy .env.example to .env and set VITE_API_BASE to your backend URL (e.g., http://localhost:5001 or your ngrok URL).
+
+D. Optional: Set up ngrok for public API access
+   1. Download and install ngrok from https://ngrok.com/
+   2. Authenticate ngrok with your account:
+      ngrok config add-authtoken <YOUR_AUTHTOKEN>
+   3. Start a tunnel to your backend port      ngrok http 5001
+
+4. Running the Project
+----------------------
+A. Start the Backend:
+   # Activate your virtual environment if not already active
+   .\venv\Scripts\Activate
+   python app.py
+
+B. Start the Frontend:
+   cd frontend
+   npm run dev
+
+C. Access the Application:
+   - Frontend: Open http://localhost:5173 (or http://localhost:3000) in your browser.
+   - Backend: Should be running on http://localhost:5001 or via your ngrok public URL.
+
+5. Using the Application
+------------------------
+- Register a new account or log in with existing credentials.
+- Navigate to the dashboard to view past measurements.
+- Use the capture flow to upload or take front and side body images.
+- Submit images to receive automated measurement results.
+- View results, overlays, and (optionally) a 3D avatar preview.
+- Export measurement history as CSV or PDF.
+- Use navigation links to access dashboard, results, and help pages.
+
+6. Troubleshooting / FAQs
+-------------------------
+Q: "ModuleNotFoundError: No module named 'flask_jwt_extended'"
+A: Ensure you installed all dependencies with pip install -r requirements.txt and that your virtual environment is activated.
+
+Q: "CORS error when accessing backend from frontend"
+A: Make sure your backend CORS configuration allows your frontend origin and custom headers (see config.py).
+
+Q: "ngrok browser warning page appears"
+A: Add the 'ngrok-skip-browser-warning' header to all frontend API requests and allow it in backend CORS settings.
+
+Q: "Backend memory errors on Render"
+A: Use local backend with ngrok for development/demo, or upgrade your Render plan for more memory.
+
+Q: "SVG NaN errors in frontend"
+A: Ensure measurement/landmark data is valid before rendering SVG elements; add defensive checks in your components.
+
+Q: "Failed to fetch images or measurements"
+A: Confirm backend and ngrok tunnel are running, and API base URL is correctly set in frontend .env.
+
+Q: "Database connection issues"
+A: Check your MongoDB URI and ensure the database server is running and accessible.
+
+=========================================================
+For further help, consult the README.md or reach out to the project maintainer.
+=========================================================
